@@ -6,7 +6,6 @@ namespace TeklaApp.Views
 {
     public class MainForm : Form
     {
-        private TextBox txtInfo;
         private MainViewModel _viewModel;
 
         public MainForm()
@@ -14,7 +13,7 @@ namespace TeklaApp.Views
             _viewModel = new MainViewModel();
 
             Text = "Công cụ Tekla 2025";
-            Size = new System.Drawing.Size(350, 450);
+            Size = new System.Drawing.Size(350, 320);
             StartPosition = FormStartPosition.CenterScreen;
 
             Button btnReadParams = new Button();
@@ -41,48 +40,50 @@ namespace TeklaApp.Views
             btnRemoveDuplicates.Size = new System.Drawing.Size(200, 40);
             btnRemoveDuplicates.Click += BtnRemoveDuplicates_Click;
 
-            txtInfo = new TextBox();
-            txtInfo.Multiline = true;
-            txtInfo.Location = new System.Drawing.Point(20, 230);
-            txtInfo.Size = new System.Drawing.Size(290, 150);
-            txtInfo.ReadOnly = true;
-            txtInfo.ScrollBars = ScrollBars.Vertical;
+            Button btnStepTag = new Button();
+            btnStepTag.Text = "Lệnh 5: Ký hiệu giật cấp";
+            btnStepTag.Location = new System.Drawing.Point(60, 220);
+            btnStepTag.Size = new System.Drawing.Size(200, 40);
+            btnStepTag.Click += BtnStepTag_Click;
 
             Controls.Add(btnReadParams);
             Controls.Add(btnDeleteCut);
             Controls.Add(btnAddAssembly);
             Controls.Add(btnRemoveDuplicates);
-            Controls.Add(txtInfo);
+            Controls.Add(btnStepTag);
+        }
+
+        private void BtnStepTag_Click(object sender, EventArgs e)
+        {
+            StepTagViewModel tgViewModel = new StepTagViewModel();
+            string result = tgViewModel.CreateStepTag();
+            MessageBox.Show(result, "Thông báo");
         }
 
         private void BtnRemoveDuplicates_Click(object sender, EventArgs e)
         {
             string result = _viewModel.RemoveDuplicateCuts();
-            UpdateInfo(result);
+            MessageBox.Show(result, "Thông báo");
         }
 
 
         private void BtnReadParams_Click(object sender, EventArgs e)
         {
-            string result = _viewModel.ReadParameters();
-            UpdateInfo(result);
+            ParameterForm paramForm = new ParameterForm();
+            paramForm.ShowDialog(this);
         }
 
         private void BtnDeleteCut_Click(object sender, EventArgs e)
         {
             string result = _viewModel.DeletePartCuts();
-            UpdateInfo(result);
+            MessageBox.Show(result, "Thông báo");
         }
 
         private void BtnAddAssembly_Click(object sender, EventArgs e)
         {
             string result = _viewModel.JoinAssembly();
-            UpdateInfo(result);
+            MessageBox.Show(result, "Thông báo");
         }
 
-        private void UpdateInfo(string message)
-        {
-            txtInfo.Text = message;
-        }
     }
 }
